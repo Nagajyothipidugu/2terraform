@@ -49,3 +49,10 @@ variable "instances" {
     default= ["mongodb" ,"redis" ,"mysql", "rabbitmq"]
 }
 
+variable "zone_id" {
+    default = "Z00583343821Q6B1A8IK6"
+}
+variable "domain_name" {
+    default="devaws46.online"
+}
+

@@ -1,15 +1,40 @@
 resource "aws_instance" "roboshop" {
-  count      = length(var.instances)
   ami           = var.ami_id  # left side and right side names no need to be same 
-  instance_type = var.environment == "dev" ? "t3.micro": "t3.small"
+  instance_type = var.instance_type
   vpc_security_group_ids = [ aws_security_group.allow_all.id ]
 
-  tags = {
-    
-      Name= var.instances[count.index]
+  tags = var.ec2_tags
+
+  provisioner "local-exec" {
+    command = " echo  ${self.private_ip} > inventory"
+    on_failure = continue
+  }
+
+  provisioner "local-exec" {
+    command = "echo instance is destroyed"
+    when =destroy
+  }
+
+  connection {
+    type ="ssh"
+    user =  "ec2-user"
+    password = "DevOps321"
+    host =  self.publi_ip
+  }
+
+  provisioner "remote_exec" {
+    inline = [
+         "sudo dnf install nginx -y " ,
+         "sudo systemctl start nginx " ,
+    ]
+  }
+  provisioner "remote_exec" {
+    when = destroy
+    inline = [
+          "sudo systemctl stop nginx "
+    ]
   }
 }
-
 
 resource "aws_security_group" "allow_all" {
   name   =       var.sg_name

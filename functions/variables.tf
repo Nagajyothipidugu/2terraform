@@ -11,14 +11,14 @@ variable "instance_type" {
 variable "ec2_tags" { 
     type = map(string)
     default = {
-        Name = "hello-world"
+        Name = "roboshop"
         purpose = "variables-demo"
     }
 }
 
 variable "sg_name" {
     type = string 
-    default =  "vars-file_allow_all"
+    default =  "allow_all"
 }
 variable "sg_description" { 
     type= string 
@@ -40,7 +40,25 @@ variable "sg_tags" {
     default= {
         Name = "allow_all"
     }
+}
+variable "environment" {
+    default = "dev"
 } 
 
+variable "instances" {
+    default= ["mongodb" ,"redis" ,"mysql", "rabbitmq"]
+}
 
+variable "zone_id" {
+    default = "Z00583343821Q6B1A8IK6"
+}
+variable "domain_name" {
+    default="devaws46.online"
+}
 
+variable "common_tags" {
+    default = {
+        project ="Roboshop"
+        terraform = true
+    }
+}
